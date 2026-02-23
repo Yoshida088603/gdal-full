@@ -9,6 +9,5 @@ arrow-build/
 arrow-src/
 arrow-install/
 
-# パイプライン入出力（再生成または別管理）
+# パイプライン入力（再生成または別管理）
 input_data/
-output_data/
