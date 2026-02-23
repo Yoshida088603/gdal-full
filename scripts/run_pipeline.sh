@@ -46,7 +46,8 @@ for shp in "$INPUT_DIR"/*.shp; do
     continue
   fi
   [[ -f "$OUTPUT_DIR/${base}.parquet" ]] || continue
-  ogr2ogr -f FlatGeobuf "$OUTPUT_DIR/${base}.fgb" "$OUTPUT_DIR/${base}.parquet" 2>&1 || true
+  ogr2ogr -f FlatGeobuf -nlt PROMOTE_TO_MULTI -lco SPATIAL_INDEX=NO \
+    "$OUTPUT_DIR/${base}.fgb" "$OUTPUT_DIR/${base}.parquet" 2>&1 || true
   ogr2ogr -skipfailures -dsco MINZOOM=0 -dsco MAXZOOM=15 -f "PMTiles" \
     "$OUTPUT_DIR/${base}.pmtiles" "$OUTPUT_DIR/${base}.parquet" 2>&1 || true
 done
