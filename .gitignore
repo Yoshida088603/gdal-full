@@ -1,0 +1,14 @@
+# 隔離ビルド成果物（このディレクトリを消せばすべて消える）
+local/
+gdal-build/
+gdal-src/
+*.tar.gz
+
+# Arrow ビルド・ソース・インストール先（build_arrow.sh で再生成可能）
+arrow-build/
+arrow-src/
+arrow-install/
+
+# パイプライン入出力（再生成または別管理）
+input_data/
+output_data/
