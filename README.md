@@ -53,6 +53,8 @@ cd /home/ubuntu/projects/gdal-full
 - **出力**: `output_data/<ベース名>.parquet` / `.fgb` / `.pmtiles`
 - **信頼してよい出力**: Parquet・FGB・PMTiles はいずれも全レイヤで入力と件数一致（FGB は Polygon/MultiPolygon 混在・NULL ジオメトリ対策済み）。詳細は [docs/pipeline.md](docs/pipeline.md) を参照。
 
+**PostgreSQL から変換する場合**: ダンプ（.sql / .backup）を PostgreSQL にリストアしたうえで、`scripts/run_pipeline_pg.sh` を使う。接続文字列（`PG_CONNECTION` または第1引数）の指定と手順は [docs/pipeline_pg.md](docs/pipeline_pg.md) を参照。
+
 ## ディレクトリ構成（ビルド後）
 
 - `local/` — GDAL インストール先（bin, lib, share）
@@ -62,7 +64,7 @@ cd /home/ubuntu/projects/gdal-full
 - `arrow-build/` — Arrow ビルド用
 - `arrow-install/` — Arrow/Parquet インストール先（Parquet 有効時。`env.sh` が実行時に LD_LIBRARY_PATH に追加）
 - `build_arrow.sh` — Arrow ビルド用スクリプト（Parquet 有効化時に実行）
-- `scripts/` — パイプラインスクリプト（`run_pipeline.sh`）
+- `scripts/` — パイプラインスクリプト（`run_pipeline.sh`, `run_pipeline_pg.sh`）
 - `input_data/` — 入力 Shapefile
 - `output_data/` — 変換結果（parquet / fgb / pmtiles）
 - このディレクトリを削除すれば上記も含めてすべて消える（システムには入れない）。
