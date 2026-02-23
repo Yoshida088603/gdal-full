@@ -14,6 +14,12 @@
 - 入力 CRS は .prj から読み取られる（EPSG:6674）。`-t_srs` は不要。
 - 真幅道路ポリゴンは約 8 万フィーチャで最大。メモリ・実行時間はこのレイヤで確認すること。
 
+## 出力の正しさについて
+
+- **入力と出力のフィーチャ数**を比較すれば、スキップの有無が分かる。件数が一致していれば、少なくとも全件写っている。
+- **信頼してよい出力**: 現状のパイプラインでは **GeoParquet と PMTiles** は全レイヤで入力件数と一致する。**Parquet / PMTiles を正とする**運用を推奨する。
+- **FGB の既知の制限**: GeoParquet → FGB の変換で、**庭園路・真幅道路・高速道路ポリゴン**の 3 レイヤは、ジオメトリ型の扱いの関係で **0 件の FGB が出力される**ことがある。トンネルポリゴンは問題なく変換される。FGB が必要な場合は Parquet から別ツールで変換するか、レイヤごとの確認を推奨する。
+
 ## 検証（Parquet 有効時）
 
 ```bash
@@ -21,4 +27,11 @@ source env.sh
 ogrinfo -al -so output_data/トンネルポリゴン.parquet
 ```
 
-CRS に EPSG:6674 が含まれること、フィーチャ数が入力と一致することを確認する。
+CRS に EPSG:6674 が含まれること、フィーチャ数が入力と一致することを確認する。全レイヤの件数比較例:
+
+```bash
+for name in トンネルポリゴン 庭園路ポリゴン 真幅道路ポリゴン 高速道路ポリゴン; do
+  echo -n "$name: SHP="; ogrinfo -so -al "input_data/${name}.shp" 2>/dev/null | grep "Feature Count"
+  echo -n "       Parquet="; ogrinfo -so -al "output_data/${name}.parquet" 2>/dev/null | grep "Feature Count"
+done
+```

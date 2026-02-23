@@ -43,7 +43,7 @@ cd /home/ubuntu/projects/gdal-full
 
 - 入力: `input_data/*.shp`
 - 出力: `output_data/<ベース名>.parquet` / `.fgb` / `.pmtiles`
-- 一部レイヤで「Mismatched geometry type」が出る場合がある。そのレイヤは Parquet 書き出しでスキップされ、他レイヤは続行する。
+- 一部レイヤで「Mismatched geometry type」という警告が出ることがある。**Parquet 出力**は現状全レイヤで入力と件数一致しており信頼してよい。**FGB** は庭園路・真幅道路・高速道路の 3 レイヤで 0 件になることがある（[docs/pipeline.md](pipeline.md) の「出力の正しさについて」参照）。**Parquet / PMTiles を正とする**運用を推奨する。
 
 ## 参照
 

@@ -51,6 +51,7 @@ cd /home/ubuntu/projects/gdal-full
 
 - **入力**: `input_data/*.shp`（4 レイヤ: トンネル・庭園路・真幅道路・高速道路ポリゴン）
 - **出力**: `output_data/<ベース名>.parquet` / `.fgb` / `.pmtiles`
+- **信頼してよい出力**: Parquet と PMTiles は全レイヤで入力と件数一致。FGB は庭園路・真幅道路・高速道路で 0 件になることがある。詳細は [docs/pipeline.md](docs/pipeline.md) を参照。
 
 ## ディレクトリ構成（ビルド後）
 
