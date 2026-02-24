@@ -1,0 +1,1 @@
+/home/ubuntu/projects/gdal-full/pg-src/contrib/dict_xsyn/Makefile

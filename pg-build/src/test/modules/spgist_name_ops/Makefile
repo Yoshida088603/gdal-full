@@ -1,0 +1,1 @@
+/home/ubuntu/projects/gdal-full/pg-src/src/test/modules/spgist_name_ops/Makefile

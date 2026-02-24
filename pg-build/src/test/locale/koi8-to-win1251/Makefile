@@ -1,0 +1,1 @@
+/home/ubuntu/projects/gdal-full/pg-src/src/test/locale/koi8-to-win1251/Makefile

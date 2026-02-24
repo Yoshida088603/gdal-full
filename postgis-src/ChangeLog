@@ -1,0 +1,169 @@
+2026-02-09  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* NEWS, Version.config: Set up versions for tagging
+
+2026-02-09  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* configure.ac: Correctly detect MacOS and set up rpath ldflags
+
+2026-02-09  Regina Obe <lr@pcorp.us>
+
+	* NEWS, Version.config, extensions/upgradeable_versions.mk: Flip to
+	3.4.6dev milestone
+
+2026-02-09  Regina Obe <lr@pcorp.us>
+
+	* NEWS, README.postgis, doc/release_notes.xml: Update release dates
+
+2026-02-09  Regina Obe <lr@pcorp.us>
+
+	* ci/debbie/postgis_regress.sh: Downgrade turn off still seems not
+	to be working Turning off upgrade testing completely on debbie, so
+	can get release out References #6042 for PostGIS 3.4.5
+
+2026-02-09  Sandro Santilli <strk@kbt.io>
+
+	* ci/debbie/postgis_regress.sh: Have debbie still check upgrades and
+	only skip downgrade testing References #6042 for PostGIS 3.4.5
+
+2025-08-27  Sandro Santilli <strk@kbt.io>
+
+	* utils/check_all_upgrades.sh: Make sure "make check" is unbuffered
+	during upgrade checks Fixes some cases of unexpected content in log file
+
+2026-02-09  Regina Obe <lr@pcorp.us>
+
+	* ci/winnie/regress_postgis.sh, doc/Makefile.in: ADd check for
+	XSLBASE and don't do check-xml unless it's set References #6044 for
+	PostGIS 3.4.5
+
+2026-02-09  Regina Obe <lr@pcorp.us>
+
+	* .cirrus.yml: Turn off cirrus, as we have no credits left on it
+
+2026-02-08  Regina Obe <lr@pcorp.us>
+
+	* ci/winnie/winnie_common.sh: Standardize winnie configs
+
+2026-02-08  Regina Obe <lr@pcorp.us>
+
+	* ci/debbie/postgis_regress.sh: SKIP upgrade tests on debbie
+	References #6042 for PostGIS 3.4.5
+
+2026-02-08  Regina Obe <lr@pcorp.us>
+
+	* extras/tiger_geocoder/tiger_loader_2023.sql: Remove create schema
+	tiger_data.  This should not be part of the extension
+
+2026-02-07  Regina Obe <lr@pcorp.us>
+
+	* README.postgis, Version.config, doc/release_notes.xml,
+	extensions/upgradeable_versions.mk: Prep for PostGIS 3.4.5 release
+
+2026-02-07  Regina Obe <lr@pcorp.us>
+
+	* NEWS, extensions/postgis_extension_helper.sql.in,
+	extensions/postgis_extension_helper_uninstall.sql,
+	extensions/postgis_tiger_geocoder/Makefile.in,
+	extensions/postgis_tiger_geocoder/sql_bits/remove_from_extension.sq
+	l.in, extensions/postgis_topology/Makefile.in,
+	extensions/postgis_topology/sql_bits/remove_from_extension.sql.in: 
+	Remove postgis_extension_remove_objects References #5853 for PostGIS
+	3.4.5
+
+2026-02-06  Regina Obe <lr@pcorp.us>
+
+	* NEWS, extras/tiger_geocoder/pagc_normalize/pagc_tables.sql,
+	extras/tiger_geocoder/tiger_loader_2012.sql,
+	extras/tiger_geocoder/tiger_loader_2013.sql,
+	extras/tiger_geocoder/tiger_loader_2014.sql,
+	extras/tiger_geocoder/tiger_loader_2015.sql,
+	extras/tiger_geocoder/tiger_loader_2016.sql,
+	extras/tiger_geocoder/tiger_loader_2017.sql,
+	extras/tiger_geocoder/tiger_loader_2018.sql,
+	extras/tiger_geocoder/tiger_loader_2019.sql,
+	extras/tiger_geocoder/tiger_loader_2020.sql,
+	extras/tiger_geocoder/tiger_loader_2021.sql,
+	extras/tiger_geocoder/tiger_loader_2022.sql,
+	extras/tiger_geocoder/tiger_loader_2023.sql:  TIGER EXTENSION SECURITY fix    - Ensure tables are created by tiger extension and bale if not.
+	   Patch provided by Andrey Borodin (Yandex)    - References #5998 for PostGIS 3.4.5
+
+2026-02-02  Maksim Korotkov <m.korotkov@postgrespro.ru>
+
+	* postgis/flatgeobuf.c: Fix memory allocation size for arrays in
+	flatgeobuf_decode_row The original code incorrectly allocated memory
+	for pointers instead of the actual types, potentially causing buffer
+	overflows or memory corruption since it was allocating insufficient
+	memory (size of pointer instead of size of Datum/bool).  Found by PostgesPro.  Fixes: 3ae2c5844 ("FlatGeobuf format
+	input/output") Signed-off-by: Maksim Korotkov
+	<m.korotkov@postgrespro.ru>
+
+2026-01-27  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* postgis/gserialized_typmod.c: Fix mixed declarations mistake
+
+2026-01-27  bdreiss <bd_reiss@gmx.at>
+
+	* postgis/gserialized_typmod.c: The geodetic flag was queried after
+	gser has been freed ################################################### BUG REPORT
+	################################################## ### DESCRITPION ### The geodetic flag was queried after gser has been freed in line 143,
+	leading to a use-after-free bug. This means the behaviour is
+	undefined and it is not clear, which branch will be taken (and
+	therefor, whether geometry or geography is returned). Below you find
+	the output from gdb can be seen, that confirms that a) the point is
+	indeed inserted with the wrong flag and b) also after selecting the
+	point from the table remains unset. Issues when using SQL could not
+	be produced.  ### SETUP IN PG ### CREATE EXTENSION postgis; CREATE TABLE test_geog (id SERIAL PRIMARY
+	KEY, geog geography(POINT, 4326)); INSERT INTO test_geog (geog)
+	VALUES (ST_GeogFromText('SRID=4326;POINT(-77.0092 38.889588)')); ### GDB OUPUT AND STEPS TO REPRODUCE ### postgres@localhost:~$ gdb --args /usr/local/pgsql/bin/postgres
+	--single -D $PGDATA postgres (gdb) break gserialized_typmod.c:143 (gdb) break gserialized_typmod.c:150 (gdb) break geography_out (gdb) run backend> INSERT INTO test_geog (geog) VALUES
+	(ST_GeogFromText('SRID=4326;MULTIPOINT EMPTY')); Breakpoint 1,
+	postgis_valid_typmod (gser=0x58f991a3f378, typmod=1107460) at
+	gserialized_typmod.c:143 143     gserialized_typmod.c: No such file
+	or directory.  (gdb) call gserialized_is_geodetic(gser) $1 = 1 (gdb) c Continuing.  Breakpoint 2, postgis_valid_typmod (gser=0x58f991a8e150,
+	typmod=1107460) at gserialized_typmod.c:151 151     in
+	gserialized_typmod.c (gdb) call gserialized_is_geodetic(gser) $2 = 0 (gdb) c Continuing.  backend> backend> INSERT INTO test_geog (geog)
+	VALUES (ST_GeogFromText('SRID=4326;POINT(-77.0092 38.889588)')); Breakpoint 2, postgis_valid_typmod (gser=0x58f991a3dca8,
+	typmod=1107460) at gserialized_typmod.c:151 151     in
+	gserialized_typmod.c (gdb) call gserialized_is_geodetic(gser) $4 = 1 (gdb) c Continuing.  backend> backend> select geog from test_geog
+	         where id=1; 1: geog        (typeid = 14296, len = -1, typmod = 1107460, byval =
+	        f) ---- Breakpoint 3, geography_out (fcinfo=0x7ffe871b40e0) at
+	/usr/local/pgsql/include/server/postgres.h:319 319
+	return (Pointer) X; (gdb) set $gser = (GSERIALIZED *) pg_detoast_datum((void *)
+	fcinfo->args[0].value) (gdb) call gserialized_is_geodetic($gser) $7 = 0 (gdb) c Continuing.           1: geog =
+	        "0101000020E6100000000000000000F87F000000000000F87F"
+	        (typeid = 14296, len = -1, typmod = 1107460, byval = f) ----
+	backend> select geog from test_geog where id=2;          1: geog        (typeid = 14296, len = -1, typmod = 1107460,
+	        byval = f) ---- Breakpoint 3, geography_out (fcinfo=0x7ffe871b40e0) at
+	/usr/local/pgsql/include/server/postgres.h:319 319
+	return (Pointer) X; (gdb) set $gser = (GSERIALIZED *) pg_detoast_datum((void *)
+	fcinfo->args[0].value) (gdb) call gserialized_is_geodetic($gser) $8 = 1 (gdb) c Continuing.           1: geog =
+	        "0101000020E6100000E3C798BB964053C000750305DE714340"
+	        (typeid = 14296, len = -1, typmod = 1107460, byval = f) ----
+	backend> ### INFO ### postgres=# SELECT version();                                               version
+
+	--------------------------------------------------------------------------------------------------- PostgreSQL 18.1 on x86_64-pc-linux-gnu, compiled by gcc (Debian
+	 12.2.0-14+deb12u1) 12.2.0, 64-bit (1 row) postgres=# SELECT postgis_full_version();
+	postgis_full_version
+	----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	--------------------------------------------------------------------------------------------------------------------------------------------------------------- POSTGIS="3.6.1 f533623" [EXTENSION] PGSQL="180"
+	 GEOS="3.11.1-CAPI-1.17.1" PROJ="9.1.1 NETWORK_ENABLED=OFF
+	 URL_ENDPOINT=https://cdn.proj.org
+	 USER_WRITABLE_DIRECTORY=/home/postgres/.loc al/share/proj
+	DATABASE_PATH=/usr/share/proj/proj.db" (compiled against PROJ 9.1.1)
+	LIBXML="2.9.14" LIBJSON="0.16" LIBPROTOBUF="1.4.1" WAGYU="0.5.0
+	(Internal)" (1 row) COMPILE FLAGS USED: CC=clang ./configure --with-pgconfig=/usr/bin/pg_config CFLAGS="-O0
+	-g -fsanitize=address -fno-omit-frame-pointer"
+	LDFLAGS="-fsanitize=address"
+	###############################################################################################################
+
+2026-01-26  Maksim Korotkov <m.korotkov@postgrespro.ru>
+
+	* postgis/geography_centroid.c: Replace check for avoiding NULL
+	dereference Fixes: 9726c4770 ("missed file commit for ST_Centroid Geography
+	support references #2951") Signed-off-by: Maksim Korotkov <m.korotkov@postgrespro.ru>
+
+2026-01-20  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* News item for 680639af5
+

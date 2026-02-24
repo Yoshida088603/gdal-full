@@ -1,0 +1,179 @@
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-04-28 10:11+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <kde-i18n-doc@kde.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Tag: title
+#: xsl-config.xml:41
+#, no-c-format
+msgid "PostGIS Functions new or enhanced in %"
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:42
+#, no-c-format
+msgid ""
+"The functions given below are PostGIS functions that were added or enhanced."
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:53
+#, no-c-format
+msgid "Functions new in PostGIS %"
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:56
+#, no-c-format
+msgid "Functions enhanced in PostGIS %"
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:59
+#, no-c-format
+msgid "Functions changed in PostGIS %"
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:70
+#, no-c-format
+msgid "This method needs address_standardizer extension."
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:77
+#, no-c-format
+msgid "This method supports Circular Strings and Curves."
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:84
+#, no-c-format
+msgid ""
+"For geography this is a thin wrapper around the geometry implementation."
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:88
+#, no-c-format
+msgid ""
+"This function automatically includes a bounding box comparison that makes "
+"use of any spatial indexes that are available on the geometries."
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:97
+#, no-c-format
+msgid "This function supports M coordinates."
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:106
+#, no-c-format
+msgid "This function supports Polyhedral surfaces."
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:115
+#, no-c-format
+msgid "This method is also provided by SFCGAL backend."
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:124
+#, no-c-format
+msgid "This method needs SFCGAL backend."
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:133
+#, no-c-format
+msgid ""
+"This method implements the <ulink url=\"http://www.opengeospatial.org/"
+"standards/sfs\">OGC Simple Features Implementation Specification for SQL 1.1."
+"</ulink>"
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:144
+#, no-c-format
+msgid "This method implements the SQL/MM specification."
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:153
+#, no-c-format
+msgid ""
+"This function supports Triangles and Triangulated Irregular Network Surfaces "
+"(TIN)."
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:162
+#, no-c-format
+msgid "This function supports 3d and will not drop the z-index."
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:167
+#, no-c-format
+msgid ""
+"If the optional <code>gridSize</code> parameter is given (GEOS-3.9.0 or "
+"higher required), all result vertices are guaranteed to fall on a grid of "
+"the specified size. For the operation to give predictable results all the "
+"input vertices must fall already on the specified grid, see <xref "
+"linkend=\"ST_ReducePrecision\"/>."
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:176
+#, no-c-format
+msgid "New in this release"
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:179
+#, no-c-format
+msgid "Enhanced in this release"
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:182
+#, no-c-format
+msgid "Aggregate"
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:185
+#, no-c-format
+msgid "Window function"
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:188
+#, no-c-format
+msgid "Requires GEOS (3.9,3.10,3.11,3.12) or higher"
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:191
+#, no-c-format
+msgid "2.5/3D support"
+msgstr ""
+
+#. Tag: para
+#: xsl-config.xml:194
+#, no-c-format
+msgid "Supports geography"
+msgstr ""

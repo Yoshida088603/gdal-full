@@ -1,0 +1,1 @@
+/home/ubuntu/projects/gdal-full/pg-src/src/test/modules/ssl_passphrase_callback/Makefile

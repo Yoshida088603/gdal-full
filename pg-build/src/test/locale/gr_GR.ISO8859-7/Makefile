@@ -1,0 +1,1 @@
+/home/ubuntu/projects/gdal-full/pg-src/src/test/locale/gr_GR.ISO8859-7/Makefile

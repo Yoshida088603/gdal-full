@@ -1,0 +1,1 @@
+/home/ubuntu/projects/gdal-full/pg-src/src/test/modules/test_ddl_deparse/Makefile
