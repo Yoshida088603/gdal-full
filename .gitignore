@@ -11,3 +11,6 @@ arrow-install/
 
 # パイプライン入力（再生成または別管理）
 input_data/
+
+# PostgreSQL データディレクトリ（ローカル運用用・再生成可能、大容量のためリポジトリに含めない）
+pg-data/
