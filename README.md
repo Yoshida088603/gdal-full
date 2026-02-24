@@ -53,7 +53,7 @@ cd /home/ubuntu/projects/gdal-full
 - **出力**: `output_data/<ベース名>.parquet` / `.fgb` / `.pmtiles`
 - **信頼してよい出力**: Parquet・FGB・PMTiles はいずれも全レイヤで入力と件数一致（FGB は Polygon/MultiPolygon 混在・NULL ジオメトリ対策済み）。詳細は [docs/pipeline.md](docs/pipeline.md) を参照。
 
-**PostgreSQL から変換する場合**: ダンプ（.sql / .backup）を PostgreSQL にリストアしたうえで、`scripts/run_pipeline_pg.sh` を使う。接続文字列（`PG_CONNECTION` または第1引数）の指定と手順は [docs/pipeline_pg.md](docs/pipeline_pg.md) を参照。
+**PostgreSQL から変換する場合**: ダンプ（.sql / .backup）を PostgreSQL にリストアしたうえで、`scripts/run_pipeline_pg.sh` を使う。接続文字列（`PG_CONNECTION` または第1引数）の指定と手順は [docs/pipeline_pg.md](docs/pipeline_pg.md) を参照。PostgreSQL をシステムに入れず使う場合は [build_postgresql.sh](build_postgresql.sh) と [docs/postgresql_build.md](docs/postgresql_build.md) を参照。
 
 ## ディレクトリ構成（ビルド後）
 

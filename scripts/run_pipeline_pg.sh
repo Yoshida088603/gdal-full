@@ -41,8 +41,9 @@ for drv in Parquet FlatGeobuf PMTiles PostgreSQL; do
   fi
 done
 
-# 対象レイヤ一覧を取得（ogrinfo -so の "Layer name:" 行から）
-LAYERS=$(ogrinfo -so "$PG_CONNECTION" 2>/dev/null | sed -n 's/^Layer name: *//p' || true)
+# 対象レイヤ一覧を取得（"Layer name:" または "N: name (Type)" 形式の両方に対応）
+export PG_LIST_ALL_TABLES=YES
+LAYERS=$(ogrinfo -so "$PG_CONNECTION" 2>/dev/null | sed -n -e 's/^Layer name: *//p' -e 's/^[0-9]*: *\([^ (]*\).*/\1/p' | grep -v '^$' | sort -u || true)
 if [[ -z "$LAYERS" ]]; then
   echo "Error: No layers found for $PG_CONNECTION" >&2
   exit 1
@@ -64,10 +65,16 @@ while IFS= read -r layer; do
     continue
   fi
   [[ -f "$OUTPUT_DIR/${safe_name}.parquet" ]] || continue
-  ogr2ogr -f FlatGeobuf -nlt PROMOTE_TO_MULTI -lco SPATIAL_INDEX=NO \
-    "$OUTPUT_DIR/${safe_name}.fgb" "$OUTPUT_DIR/${safe_name}.parquet" 2>&1 || true
-  ogr2ogr -skipfailures -dsco MINZOOM=0 -dsco MAXZOOM=15 -f "PMTiles" \
-    "$OUTPUT_DIR/${safe_name}.pmtiles" "$OUTPUT_DIR/${safe_name}.parquet" 2>&1 || true
+  # ジオメトリがある場合のみ FGB / PMTiles を出力（Geometry: None のレイヤはスキップ）
+  HAS_GEOM=$(ogrinfo -so "$OUTPUT_DIR/${safe_name}.parquet" 2>/dev/null | sed -n 's/^Geometry: *//p' | head -1)
+  if [[ -n "$HAS_GEOM" && "$HAS_GEOM" != "None" ]]; then
+    ogr2ogr -f FlatGeobuf -nlt PROMOTE_TO_MULTI -lco SPATIAL_INDEX=NO \
+      "$OUTPUT_DIR/${safe_name}.fgb" "$OUTPUT_DIR/${safe_name}.parquet" 2>&1 || true
+    ogr2ogr -skipfailures -dsco MINZOOM=0 -dsco MAXZOOM=15 -f "PMTiles" \
+      "$OUTPUT_DIR/${safe_name}.pmtiles" "$OUTPUT_DIR/${safe_name}.parquet" 2>&1 || true
+  else
+    echo "  (ジオメトリなしのため FGB/PMTiles はスキップ)"
+  fi
 done <<< "$LAYERS"
 
 [[ $FAILED -eq 0 ]] || { echo "一部レイヤでエラーがありました。上記を確認してください。" >&2; true; }
