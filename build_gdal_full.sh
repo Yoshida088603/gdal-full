@@ -18,7 +18,7 @@ echo ""
 # ソース取得
 if [[ ! -f "$SRC_DIR/CMakeLists.txt" ]]; then
   echo "Downloading GDAL ${GDAL_VERSION}..."
-  (cd "$PROJECT_ROOT" && curl -sL -o "$TARBALL" "$URL" && tar xzf "$TARBALL" && rm -rf gdal-src && mv "gdal-${GDAL_VERSION}" gdal-src && rm -f "$TARBALL")
+  (cd "$PROJECT_ROOT" && curl -sL -o "$TARBALL" "$URL" && tar xzf "$TARBALL" --no-same-owner && rm -rf gdal-src && mv "gdal-${GDAL_VERSION}" gdal-src && rm -f "$TARBALL")
 fi
 
 # arrow-install があれば Parquet 有効化のため CMAKE_PREFIX_PATH に追加

@@ -30,7 +30,7 @@ fi
 # --- PostgreSQL ソース取得・展開 ---
 if [[ ! -f "$SRC_DIR/src/bin/pg_ctl/pg_ctl.c" ]]; then
   echo "Downloading PostgreSQL ${PG_VERSION}..."
-  (cd "$PROJECT_ROOT" && curl -sL -o "$PG_ARCHIVE" "$PG_URL" && tar xjf "$PG_ARCHIVE" && rm -rf pg-src && mv "postgresql-${PG_VERSION}" pg-src && rm -f "$PG_ARCHIVE")
+  (cd "$PROJECT_ROOT" && curl -sL -o "$PG_ARCHIVE" "$PG_URL" && tar xjf "$PG_ARCHIVE" --no-same-owner && rm -rf pg-src && mv "postgresql-${PG_VERSION}" pg-src && rm -f "$PG_ARCHIVE")
 fi
 
 # --- PostgreSQL ビルド（out-of-source） ---
@@ -44,7 +44,7 @@ make install
 POSTGIS_SRC="$PROJECT_ROOT/postgis-src"
 if [[ ! -f "$POSTGIS_SRC/configure" ]]; then
   echo "Downloading PostGIS ${POSTGIS_VERSION}..."
-  (cd "$PROJECT_ROOT" && curl -sL -o "$POSTGIS_ARCHIVE" "$POSTGIS_URL" && tar xzf "$POSTGIS_ARCHIVE" && rm -rf postgis-src && mv "postgis-${POSTGIS_VERSION}" postgis-src && rm -f "$POSTGIS_ARCHIVE")
+  (cd "$PROJECT_ROOT" && curl -sL -o "$POSTGIS_ARCHIVE" "$POSTGIS_URL" && tar xzf "$POSTGIS_ARCHIVE" --no-same-owner && rm -rf postgis-src && mv "postgis-${POSTGIS_VERSION}" postgis-src && rm -f "$POSTGIS_ARCHIVE")
 fi
 cd "$POSTGIS_SRC"
 ./configure PG_CONFIG="$INSTALL_DIR/bin/pg_config" --without-protobuf

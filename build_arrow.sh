@@ -27,7 +27,7 @@ fi
 # ソース取得
 if [[ ! -f "$SRC_DIR/cpp/CMakeLists.txt" ]]; then
   echo "Downloading Arrow ${ARROW_VERSION}..."
-  (cd "$PROJECT_ROOT" && curl -sL -o "$ARCHIVE" "$URL" && tar xzf "$ARCHIVE" && rm -rf arrow-src && mv "apache-arrow-${ARROW_VERSION}" arrow-src && rm -f "$ARCHIVE")
+  (cd "$PROJECT_ROOT" && curl -sL -o "$ARCHIVE" "$URL" && tar xzf "$ARCHIVE" --no-same-owner && rm -rf arrow-src && mv "apache-arrow-${ARROW_VERSION}" arrow-src && rm -f "$ARCHIVE")
 fi
 
 mkdir -p "$BUILD_DIR"
