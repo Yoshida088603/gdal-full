@@ -12,5 +12,14 @@ arrow-install/
 # パイプライン入力（再生成または別管理）
 input_data/
 
+# 入出力データ（大容量のためリポジトリに含めない）
+inputfile/
+output_data/
+*.pmtiles
+*.gpkg
+*.parquet
+convert_log*.txt
+parquet_sample5*.txt
+
 # PostgreSQL データディレクトリ（ローカル運用用・再生成可能、大容量のためリポジトリに含めない）
 pg-data/
