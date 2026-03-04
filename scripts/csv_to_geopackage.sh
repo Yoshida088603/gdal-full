@@ -87,12 +87,13 @@ if [[ -d "$IN_DIR" ]]; then
   done
 fi
 
-# ---- 都市部官民基準点等データ（iconv で UTF-8 化してから ogr2ogr） ----
+# ---- 都市部官民基準点等データ（共通 Python で UTF-8 化・系番号取得し -s_srs 付きで GPKG 化） ----
 FOLDER="都市部官民基準点等データ"
 IN_DIR="$INPUT_ROOT/$FOLDER"
 OUT_DIR="$OUTPUT_ROOT/$FOLDER"
 if [[ -d "$IN_DIR" ]]; then
   mkdir -p "$OUT_DIR"
+  TOSHI_PY="$PROJECT_ROOT/scripts/csv_to_geoparquet_tochi.py"
   for csv in "$IN_DIR"/*.csv; do
     [[ -f "$csv" ]] || continue
     base=$(basename "$csv" .csv)
@@ -102,11 +103,16 @@ if [[ -d "$IN_DIR" ]]; then
       continue
     fi
     echo "[都市部] $base.csv"
-    tmp_csv="$TMPDIR/${base}_utf8.csv"
-    if ! iconv -f CP932 -t UTF-8 "$csv" > "$tmp_csv" 2>/dev/null; then
-      cp "$csv" "$tmp_csv"
+    tmp_csv="$TMPDIR/toshi_${base}.csv"
+    ZONE=$(python3 "$TOSHI_PY" "$csv" "$tmp_csv" --print-zukei 2>/dev/null | tail -1)
+    if ! [[ "$ZONE" =~ ^[0-9]+$ ]] || (( ZONE < 1 || ZONE > 19 )); then
+      echo "Warning: $FOLDER/$base.csv 座標系 1-19 が取得できません (ZONE=$ZONE)" >&2
+      FAILED=1
+      continue
     fi
-    if ! ogr2ogr -skipfailures -f GPKG \
+    EPSG=$((6668 + ZONE))
+    if ! ogr2ogr -skipfailures -f GPKG -nlt POINT \
+      -s_srs "EPSG:$EPSG" -t_srs EPSG:3857 \
       -oo X_POSSIBLE_NAMES=X座標 \
       -oo Y_POSSIBLE_NAMES=Y座標 \
       "$out" "$tmp_csv" 2>&1; then
