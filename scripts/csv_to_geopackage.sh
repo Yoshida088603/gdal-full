@@ -52,12 +52,13 @@ mkdir -p "$TMPDIR"
 cleanup() { rm -rf "$TMPDIR"; }
 trap cleanup EXIT
 
-# ---- 街区基準点等データ ----
+# ---- 街区基準点等データ（共通 Python で UTF-8 化・系番号取得し -s_srs 付きで GPKG 化） ----
 FOLDER="街区基準点等データ"
 IN_DIR="$INPUT_ROOT/$FOLDER"
 OUT_DIR="$OUTPUT_ROOT/$FOLDER"
 if [[ -d "$IN_DIR" ]]; then
   mkdir -p "$OUT_DIR"
+  GAIKU_PY="$PROJECT_ROOT/scripts/csv_to_geoparquet_tochi.py"
   for csv in "$IN_DIR"/*.csv; do
     [[ -f "$csv" ]] || continue
     base=$(basename "$csv" .csv)
@@ -67,10 +68,19 @@ if [[ -d "$IN_DIR" ]]; then
       continue
     fi
     echo "[街区] $base.csv"
-    if ! ogr2ogr -skipfailures -f GPKG \
+    tmp_csv="$TMPDIR/gaiku_${base}.csv"
+    ZONE=$(python3 "$GAIKU_PY" "$csv" "$tmp_csv" --print-zukei 2>/dev/null | tail -1)
+    if ! [[ "$ZONE" =~ ^[0-9]+$ ]] || (( ZONE < 1 || ZONE > 19 )); then
+      echo "Warning: $FOLDER/$base.csv 座標系 1-19 が取得できません (ZONE=$ZONE)" >&2
+      FAILED=1
+      continue
+    fi
+    EPSG=$((6668 + ZONE))
+    if ! ogr2ogr -skipfailures -f GPKG -nlt POINT \
+      -s_srs "EPSG:$EPSG" -t_srs EPSG:3857 \
       -oo X_POSSIBLE_NAMES=X座標 \
       -oo Y_POSSIBLE_NAMES=Y座標 \
-      "$out" "$csv" 2>&1; then
+      "$out" "$tmp_csv" 2>&1; then
       echo "Warning: $FOLDER/$base.csv failed" >&2
       FAILED=1
     fi
